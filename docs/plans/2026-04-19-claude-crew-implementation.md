@@ -509,22 +509,40 @@ git commit -m "docs: add README with usage instructions"
 
 ### Task 12: Deploy and Verify
 
-- [ ] **Step 1: Copy skills to ~/.claude/skills/**
+- [ ] **Step 1: Check existing skills directory**
 
 ```bash
-cp -r /Users/lvxin/Code/claude-crew/skills/* ~/.claude/skills/
+ls -la ~/.claude/skills/
+ls -la ~/.claude/skills/agents/ 2>/dev/null
+ls -la ~/.claude/skills/workflows/ 2>/dev/null
 ```
 
-- [ ] **Step 2: Verify deployment**
+Review the output. Identify any files or directories that would conflict with the ones being deployed (`agents/`, `workflows/`). If conflicts exist, ask the user how to handle them before proceeding.
+
+- [ ] **Step 2: Copy skills (no overwrite)**
+
+Only proceed after confirming no conflicts (or user has approved overwrite for specific files).
+
+```bash
+# Create target directories if they don't exist
+mkdir -p ~/.claude/skills/agents
+mkdir -p ~/.claude/skills/workflows
+
+# Copy individual files (won't overwrite existing unrelated files)
+cp /Users/lvxin/Code/claude-crew/skills/agents/*.md ~/.claude/skills/agents/
+cp /Users/lvxin/Code/claude-crew/skills/workflows/*.md ~/.claude/skills/workflows/
+```
+
+- [ ] **Step 3: Verify deployment**
 
 ```bash
 ls ~/.claude/skills/agents/
 ls ~/.claude/skills/workflows/
 ```
 
-Expected: 6 agent files, 3 workflow files
+Expected: 6 agent files in agents/, 3 workflow files in workflows/
 
-- [ ] **Step 3: Commit all remaining changes and verify clean state**
+- [ ] **Step 4: Commit all remaining changes and verify clean state**
 
 ```bash
 cd /Users/lvxin/Code/claude-crew
