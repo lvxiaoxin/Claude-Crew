@@ -1,5 +1,5 @@
 project: ""
-autonomy: supervised    # supervised | advisory | autonomous
+autonomy: advisory      # supervised | advisory | autonomous
 created: ""             # ISO date
 updated: ""             # ISO date
 

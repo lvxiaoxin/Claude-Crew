@@ -15,8 +15,6 @@
   .autonomy-supervised { background: #1e40af; color: #93c5fd; }
   .autonomy-advisory { background: #854d0e; color: #fcd34d; }
   .autonomy-autonomous { background: #166534; color: #86efac; }
-  .refresh-btn { background: #334155; border: 1px solid #475569; color: #e2e8f0; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; }
-  .refresh-btn:hover { background: #475569; }
   .updated { font-size: 12px; color: #64748b; }
 
   .stages { display: flex; flex-direction: column; gap: 20px; margin-bottom: 40px; }
@@ -70,7 +68,6 @@
   </div>
   <div class="header-right">
     <span class="autonomy-badge" id="autonomyBadge"></span>
-    <button class="refresh-btn" onclick="loadBoard()">Refresh</button>
   </div>
 </div>
 
@@ -85,29 +82,32 @@
 </div>
 
 <script>
-async function loadBoard() {
-  try {
-    const resp = await fetch('board.json');
-    const data = await resp.json();
-    render(data);
-  } catch (e) {
-    document.getElementById('stages').innerHTML =
-      '<div class="empty">Could not load board.json. Make sure it exists in the same directory.</div>';
-  }
-}
+// ===== BOARD DATA (PM: replace this object when regenerating) =====
+const BOARD_DATA = {
+  "project": "",
+  "autonomy": "advisory",
+  "updated": "",
+  "stages": [],
+  "tasksByStatus": {
+    "pending": [],
+    "in_progress": [],
+    "completed": [],
+    "blocked": []
+  },
+  "roleWorkload": {}
+};
+// ===== END BOARD DATA =====
 
 function render(data) {
-  // Header
   document.getElementById('projectName').textContent = data.project || 'Project Board';
   document.getElementById('updatedAt').textContent = data.updated ? `Updated: ${data.updated}` : '';
 
   const badge = document.getElementById('autonomyBadge');
-  badge.textContent = data.autonomy || 'supervised';
-  badge.className = `autonomy-badge autonomy-${data.autonomy || 'supervised'}`;
+  badge.textContent = data.autonomy || 'advisory';
+  badge.className = `autonomy-badge autonomy-${data.autonomy || 'advisory'}`;
 
-  // Stages
   const stagesEl = document.getElementById('stages');
-  stagesEl.innerHTML = data.stages.map(stage => {
+  stagesEl.innerHTML = (data.stages || []).map(stage => {
     const total = stage.tasks.total || 0;
     const completed = stage.tasks.completed || 0;
     const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -125,7 +125,6 @@ function render(data) {
       </div>`;
   }).join('');
 
-  // Kanban
   const kanbanEl = document.getElementById('kanban');
   const statuses = ['pending', 'in_progress', 'completed', 'blocked'];
   const labels = { pending: 'Pending', in_progress: 'In Progress', completed: 'Completed', blocked: 'Blocked' };
@@ -147,7 +146,6 @@ function render(data) {
       </div>`;
   }).join('');
 
-  // Workload
   const grid = document.getElementById('workloadGrid');
   const workload = data.roleWorkload || {};
   const roles = Object.keys(workload);
@@ -163,7 +161,7 @@ function render(data) {
   }
 }
 
-loadBoard();
+render(BOARD_DATA);
 </script>
 </body>
 </html>
