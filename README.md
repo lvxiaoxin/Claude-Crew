@@ -63,6 +63,8 @@ The central coordinator. Translates your ideas into actionable plans, assigns ta
 - **Outputs**: Project brief, PRD, tasks.yaml, visual board (board.html)
 - **Key behavior**: Only agent that talks to you; maintains the single source of truth for project state
 - **Board auto-update**: Regenerates the visual board whenever any task completes
+- **Session persistence**: PM stays active for the entire session — all your input goes through PM until you end the project
+- **Background dispatch**: Agents run in background so PM remains responsive to you
 
 ### Architect
 
@@ -105,8 +107,8 @@ A single global parameter controlling how all agents interact with you:
 
 | Level | Behavior | When to use |
 |---|---|---|
-| **supervised** | PM seeks your approval at every stage gate | Starting a project, learning the system (default) |
-| **advisory** | PM only escalates major decisions, risks, or ambiguity | When you trust the team's judgment on routine work |
+| **advisory** | PM only escalates major decisions, risks, or ambiguity | Default — balanced oversight |
+| **supervised** | PM seeks your approval at every stage gate | When you want full control |
 | **autonomous** | Agents operate independently; you check the board when you want | When you want maximum speed and minimal interruption |
 
 Switch anytime by telling PM: *"switch to advisory"*
@@ -179,7 +181,7 @@ stages:
         depends_on: []
 ```
 
-The visual board (`docs/project/board.html`) reads from `board.json` and renders stage progress, kanban columns, and role workload — open it in any browser.
+The visual board (`docs/project/board.html`) is self-contained HTML with embedded data — open it directly in any browser (no server needed, works with `file://` protocol).
 
 ## Superpowers Integration
 
@@ -226,7 +228,6 @@ claude-crew/
 ├── templates/
 │   └── project/             # Copied into each new project
 │       ├── tasks.yaml
-│       ├── board.json
 │       └── board.html
 └── docs/
     └── specs/               # Design specifications

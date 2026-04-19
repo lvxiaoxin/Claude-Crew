@@ -36,7 +36,7 @@ claude-crew/
 ├── templates/
 │   └── project/                   # Copied to each new project's docs/project/
 │       ├── tasks.yaml
-│       ├── board.json
+│       ├── board.html
 │       └── board.html
 └── README.md
 ```
@@ -53,8 +53,8 @@ A single global parameter controlling how all agents interact with the human:
 
 | Level | Name | Behavior |
 |---|---|---|
-| Default | **supervised** | PM seeks human approval at each stage gate |
-| Mid | **advisory** | PM only escalates major decisions, risks, or ambiguity |
+| Default | **advisory** | PM only escalates major decisions, risks, or ambiguity |
+| Mid | **supervised** | PM seeks human approval at each stage gate |
 | Full | **autonomous** | Agents operate independently; human intervenes proactively |
 
 The human can switch at any time by telling PM (e.g., "switch to advisory"). PM updates `tasks.yaml` and all agents follow.
@@ -102,14 +102,14 @@ When any agent encounters a blocker:
 
 **Tools & Capabilities:**
 - Task system (create, update, query)
-- File read/write (tasks.yaml, board.json, board.html, docs)
+- File read/write (tasks.yaml, board.html, docs)
 - Board generation (HTML visualization)
 
 **Outputs:**
 - `docs/project/brief.md` — structured project brief from human's idea
 - `docs/project/prd.md` — product requirements document
 - `docs/project/tasks.yaml` — task data (single source of truth)
-- `docs/project/board.json` — board data for rendering
+- `docs/project/board.html` — board data for rendering
 - `docs/project/board.html` — visual board (browser-viewable)
 
 **Collaboration:**
@@ -117,7 +117,11 @@ When any agent encounters a blocker:
 - Only agent that communicates with the human
 - Receives task completion notifications from all roles
 
-**Board auto-update:** Whenever any agent completes a task, PM re-reads tasks.yaml, regenerates board.json and board.html, and commits the changes.
+**Board auto-update:** Whenever any agent completes a task, PM re-reads tasks.yaml, regenerates board.html (updates embedded BOARD_DATA), and commits the changes.
+
+**Task dispatch rule:** Before dispatching any agent, PM MUST first update tasks.yaml to set the task to `in_progress`, regenerate board.html, and commit. Then dispatch the agent with `run_in_background: true` to remain responsive to the user.
+
+**Session persistence:** PM remains active for the entire session. After initialization and execution, PM continues responding to all user input as PM — handling new requirements, adjusting tasks, switching autonomy levels — until the user explicitly ends the project.
 
 ---
 
