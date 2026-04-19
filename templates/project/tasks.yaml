@@ -1,0 +1,43 @@
+project: ""
+autonomy: supervised    # supervised | advisory | autonomous
+created: ""             # ISO date
+updated: ""             # ISO date
+
+roles:
+  - pm
+  - architect
+  - designer
+  - developer
+  - tester
+  # - devops            # uncomment if needed
+
+stages:
+  - name: "Requirements & Architecture"
+    status: pending
+    tasks: []
+
+  - name: "Design"
+    status: pending
+    tasks: []
+
+  - name: "Development"
+    status: pending
+    tasks: []
+
+  - name: "Testing"
+    status: pending
+    tasks: []
+
+  - name: "Release"
+    status: pending
+    tasks: []
+
+# Task structure reference:
+# - id: T001
+#   title: ""
+#   assignee: pm | architect | designer | developer | tester | devops
+#   status: pending | in_progress | completed | blocked
+#   depends_on: []
+#   output: ""
+#   created: ""
+#   updated: ""

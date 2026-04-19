@@ -1,0 +1,44 @@
+{
+  "project": "",
+  "autonomy": "supervised",
+  "updated": "",
+  "stages": [
+    {
+      "name": "Requirements & Architecture",
+      "status": "pending",
+      "progress": 0,
+      "tasks": { "total": 0, "completed": 0, "in_progress": 0, "blocked": 0 }
+    },
+    {
+      "name": "Design",
+      "status": "pending",
+      "progress": 0,
+      "tasks": { "total": 0, "completed": 0, "in_progress": 0, "blocked": 0 }
+    },
+    {
+      "name": "Development",
+      "status": "pending",
+      "progress": 0,
+      "tasks": { "total": 0, "completed": 0, "in_progress": 0, "blocked": 0 }
+    },
+    {
+      "name": "Testing",
+      "status": "pending",
+      "progress": 0,
+      "tasks": { "total": 0, "completed": 0, "in_progress": 0, "blocked": 0 }
+    },
+    {
+      "name": "Release",
+      "status": "pending",
+      "progress": 0,
+      "tasks": { "total": 0, "completed": 0, "in_progress": 0, "blocked": 0 }
+    }
+  ],
+  "tasksByStatus": {
+    "pending": [],
+    "in_progress": [],
+    "completed": [],
+    "blocked": []
+  },
+  "roleWorkload": {}
+}
