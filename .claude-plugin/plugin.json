@@ -1,0 +1,20 @@
+{
+  "name": "claude-crew",
+  "description": "Multi-agent team system for Claude Code: PM, Architect, Designer, Developer, Tester, and DevOps roles collaborating autonomously on your projects",
+  "version": "0.1.0",
+  "author": {
+    "name": "lvxiaoxin"
+  },
+  "homepage": "https://github.com/lvxiaoxin/Claude-Crew",
+  "repository": "https://github.com/lvxiaoxin/Claude-Crew",
+  "license": "MIT",
+  "keywords": [
+    "multi-agent",
+    "team",
+    "project-management",
+    "collaboration",
+    "roles",
+    "workflows",
+    "skills"
+  ]
+}
