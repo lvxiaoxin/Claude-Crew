@@ -16,5 +16,22 @@
     "roles",
     "workflows",
     "skills"
-  ]
+  ],
+  "dependencies": {
+    "_note": "Claude Code does not yet auto-install dependencies. This section documents requirements for humans and future tooling.",
+    "built-in-tools": {
+      "description": "Claude Code built-in tools required by agents",
+      "required": ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Agent", "SendMessage", "TeamCreate", "TaskCreate", "TaskUpdate", "TaskList", "WebSearch", "WebFetch"]
+    },
+    "mcp-servers": {
+      "description": "Optional MCP servers that enable additional agent capabilities",
+      "optional": [
+        {
+          "name": "design-tool",
+          "purpose": "Designer agent: direct design tool integration (e.g., Google Stitch)",
+          "fallback": "Designer generates prompts for human to execute manually"
+        }
+      ]
+    }
+  }
 }

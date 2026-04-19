@@ -16,6 +16,27 @@ This workflow is triggered when the human provides a new project idea. PM execut
 
 ## Steps
 
+### Step 0: Preflight Check
+
+Before creating anything, verify that the required capabilities are available. For each role that will be activated, check:
+
+| Role | Required Tools | Check Method |
+|---|---|---|
+| PM | TaskCreate, TaskUpdate, TaskList, Read, Write | Try calling TaskList — if it works, core tools are available |
+| Architect | Read, Write, WebSearch, WebFetch, Bash | Try a simple WebSearch — if it works, research capability is available |
+| Designer | Read, Write | Always available; MCP design tools are optional |
+| Developer | Read, Write, Edit, Bash, Git | Try `git --version` via Bash — if it works, dev tools are available |
+| Tester | Read, Write, Bash | Same as Developer baseline |
+| DevOps | Bash, Git, Read, Write | Same as Developer baseline |
+
+**If a required tool is unavailable:**
+- Report the specific missing capability to the human
+- Suggest how to fix it (e.g., "WebSearch is not available — Architect won't be able to research technologies online. Proceed anyway?")
+- Let the human decide whether to proceed with reduced capabilities or fix the issue first
+
+**If an optional MCP tool is unavailable:**
+- Note it but don't block — the skill file defines the fallback behavior (e.g., Designer generates prompts for human to execute manually)
+
 ### Step 1: Create Project Structure
 
 Create the `docs/project/` directory and copy templates:
