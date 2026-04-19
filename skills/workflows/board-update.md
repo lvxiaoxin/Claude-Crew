@@ -1,6 +1,6 @@
 ---
 name: board-update
-description: Board refresh workflow — regenerates board.json from tasks.yaml whenever task state changes
+description: Board refresh workflow — regenerates board.html from tasks.yaml whenever task state changes
 type: workflow
 ---
 
@@ -47,12 +47,12 @@ Each task entry in these lists should include: `id`, `title`, `assignee`, `stage
 **Role workload:**
 Count the number of non-completed tasks assigned to each role. Only include roles that have at least one task.
 
-### Step 3: Write board.json
+### Step 3: Update board.html
 
-Write the computed data to `docs/project/board.json`:
+Read `docs/project/board.html` and replace the `BOARD_DATA` JavaScript object with the computed data:
 
-```json
-{
+```javascript
+const BOARD_DATA = {
   "project": "[from tasks.yaml]",
   "autonomy": "[from tasks.yaml]",
   "updated": "[current ISO timestamp]",
@@ -74,18 +74,20 @@ Write the computed data to `docs/project/board.json`:
     "developer": 3,
     "tester": 1
   }
-}
+};
 ```
+
+Use the Edit tool to replace the content between `// ===== BOARD DATA` and `// ===== END BOARD DATA =====` markers in board.html.
 
 ### Step 4: Commit
 
 ```bash
-git add docs/project/tasks.yaml docs/project/board.json
+git add docs/project/tasks.yaml docs/project/board.html
 git commit -m "chore: update project board"
 ```
 
 ## Notes
 
-- `board.html` reads `board.json` dynamically via fetch — it does not need to be regenerated or committed
+- board.html is self-contained — no external fetch, works with file:// protocol
 - Keep commits small and frequent — every board update is its own commit
 - The human can open `docs/project/board.html` in a browser at any time to see the latest state (after refreshing)

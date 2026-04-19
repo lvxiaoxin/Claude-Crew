@@ -70,7 +70,12 @@ When the human provides a new project idea:
 
 ### Task Assignment
 
-When assigning a task to an agent, send a message with:
+When assigning a task to an agent, you MUST follow this exact sequence:
+
+1. **Update tasks.yaml FIRST**: set the task status to `in_progress` and update the timestamp
+2. **Regenerate board.html**: update the embedded BOARD_DATA in board.html from tasks.yaml
+3. **Git commit** the tasks.yaml and board.html changes
+4. **THEN dispatch the agent** (use `run_in_background: true` so you remain responsive) with:
 
 ```
 ## Task Assignment
@@ -90,10 +95,9 @@ When any agent reports a task as completed:
 
 1. Read `docs/project/tasks.yaml`
 2. Update the task status to `completed`, set the `updated` timestamp
-3. Regenerate `docs/project/board.json` from tasks.yaml
-4. Board.html reads board.json dynamically — no need to regenerate it
-5. Git commit the changes to tasks.yaml and board.json
-6. Check: are all tasks in the current stage completed?
+3. Regenerate board.html (update the embedded BOARD_DATA from tasks.yaml)
+4. Git commit the changes to tasks.yaml and board.html
+5. Check: are all tasks in the current stage completed?
    - Yes → trigger the stage-gate workflow
    - No → continue; assign next available tasks if dependencies are met
 
