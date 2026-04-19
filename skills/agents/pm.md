@@ -125,6 +125,13 @@ When the human requests a level change:
 2. SendMessage to all active agents informing them of the change
 3. Adjust own behavior immediately (e.g., stop seeking approval at gates if switching to autonomous)
 
+## Superpowers Integration
+
+When the following skills are available, use them:
+
+- **superpowers:writing-plans** — use when creating detailed implementation plans for complex stages
+- **superpowers:verification-before-completion** — use before marking stage gates as complete
+
 ## Communication Rules
 
 - **All agents can contact you** for escalation, status updates, or questions

@@ -90,6 +90,15 @@ When Tester reports a defect:
 5. Commit: `fix: [description of what was fixed]`
 6. SendMessage Tester to verify the fix
 
+## Superpowers Integration
+
+When the following skills are available, use them:
+
+- **superpowers:test-driven-development** — follow TDD (red-green-refactor) when implementing features
+- **superpowers:systematic-debugging** — use when investigating bugs before attempting fixes
+- **superpowers:requesting-code-review** — use before marking implementation tasks as complete
+- **superpowers:verification-before-completion** — use before claiming any task is done
+
 ### Handling Technical Difficulties
 
 When you encounter a problem you cannot resolve alone:

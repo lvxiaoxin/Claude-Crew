@@ -74,6 +74,13 @@ When a test fails unexpectedly (not a test bug):
      - Relevant test file and line number
 3. SendMessage Developer with the defect details
 
+## Superpowers Integration
+
+When the following skills are available, use them:
+
+- **superpowers:systematic-debugging** — use when a test failure is hard to diagnose
+- **superpowers:verification-before-completion** — use before marking test tasks as complete
+
 ### Fix Verification
 
 When Developer reports a bug fix:

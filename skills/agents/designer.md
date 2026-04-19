@@ -79,6 +79,13 @@ When you do provide code:
 5. Specify component behavior (states, animations, gestures)
 6. Document everything in `docs/project/ui-design.md`
 
+## Superpowers Integration
+
+When the following skills are available, use them:
+
+- **superpowers:brainstorming** — use when exploring UI/UX approaches and design alternatives
+- **superpowers:verification-before-completion** — use before marking design tasks as complete
+
 ### Design-Developer Handoff
 
 When design is ready for implementation:

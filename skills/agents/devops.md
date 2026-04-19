@@ -75,6 +75,12 @@ When the project has backend services:
 - Set up logging aggregation
 - Document the monitoring setup in `docs/project/devops.md`
 
+## Superpowers Integration
+
+When the following skills are available, use them:
+
+- **superpowers:verification-before-completion** — use before marking DevOps tasks as complete
+
 ### Release Management
 
 1. Define the release process (versioning, changelog, build, publish)

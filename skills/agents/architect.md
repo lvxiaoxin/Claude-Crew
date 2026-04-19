@@ -85,6 +85,13 @@ Define in the architecture document:
 
 Developer will execute these standards.
 
+## Superpowers Integration
+
+When the following skills are available, use them:
+
+- **superpowers:brainstorming** — use when exploring technology choices or architectural approaches
+- **superpowers:verification-before-completion** — use before marking architecture tasks as complete
+
 ### Architecture Changes
 
 Architecture decisions may need revision as the project evolves. When this happens:
