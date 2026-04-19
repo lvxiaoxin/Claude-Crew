@@ -347,3 +347,50 @@ Human: "switch to advisory"
       advisory   → only escalate major decisions/risks
       autonomous → operate independently
 ```
+
+---
+
+## Entry Point
+
+The system is invoked via the `/crew` slash command (`skills/crew/SKILL.md`). This avoids conflicts with other skills (e.g., `superpowers:brainstorming`) that may trigger on similar prompts.
+
+```
+/crew [your project idea]
+```
+
+The `/crew` command loads the PM agent skill and initiates the project-init workflow.
+
+---
+
+## Preflight Check
+
+Before creating any project structure, PM runs a preflight check (Step 0 of project-init) that verifies each role's required tools are available:
+
+- Core tools: TaskCreate, TaskUpdate, Read, Write, Edit, Bash, Git
+- Research tools: WebSearch, WebFetch (for Architect)
+- Optional MCP tools: design tool integrations (for Designer)
+
+If a required tool is missing, PM reports it to the human and asks whether to proceed with reduced capabilities. Optional tools use fallback behavior (e.g., Designer generates prompts instead of calling a design tool directly).
+
+---
+
+## Superpowers Integration
+
+Agents leverage installed [superpowers](https://github.com/obra/superpowers) skills as enhancements. These are not hard dependencies — agents proceed without them if not installed.
+
+| Agent | Superpowers Skills |
+|---|---|
+| PM | `writing-plans`, `verification-before-completion` |
+| Architect | `brainstorming`, `verification-before-completion` |
+| Designer | `brainstorming`, `verification-before-completion` |
+| Developer | `test-driven-development`, `systematic-debugging`, `requesting-code-review`, `verification-before-completion` |
+| Tester | `systematic-debugging`, `verification-before-completion` |
+| DevOps | `verification-before-completion` |
+
+---
+
+## Distribution
+
+The system is packaged as a Claude Code plugin (`.claude-plugin/plugin.json`) for future marketplace distribution. Currently installed from source via `dev/install.sh`.
+
+Dependencies are declared in `plugin.json` under a `dependencies` field for documentation and future tooling compatibility. Claude Code does not yet auto-install plugin dependencies.

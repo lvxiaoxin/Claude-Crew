@@ -4,24 +4,43 @@ A reusable, project-agnostic multi-agent team system for Claude Code. Six specia
 
 ## Installation
 
+**Via Claude Code plugin system** (when published to a marketplace):
+
 ```
 /plugin install claude-crew
 ```
 
-Or install directly from the repository URL via Claude Code's plugin system.
+**From source** (current method):
 
-## How It Works
+```bash
+git clone https://github.com/lvxiaoxin/Claude-Crew.git
+cd Claude-Crew
+./dev/install.sh
+```
 
-You describe your idea in natural language. PM (Project Manager) decomposes it into stages and tasks, assembles the team, and drives execution. You review and approve at stage gates — or let the team run autonomously.
+The install script checks for conflicts before copying, and deploys skills to `~/.claude/skills/`.
+
+## Usage
+
+Start a project with the `/crew` slash command:
 
 ```
-You: "I want to build a cross-platform photo organizer app..."
+/crew I want to build a cross-platform photo organizer app that helps users
+delete similar photos, remove unwanted photos, and sort photos into albums
+```
 
+Or just `/crew` and describe your idea when prompted.
+
+**What happens next:**
+
+```
+/crew your idea...
+  → Preflight check: verify all required tools are available
   → PM captures your idea, creates a project brief
   → PM decomposes into stages: Requirements → Design → Development → Testing → Release
   → PM assigns first-stage tasks to Architect and itself
   → Team executes, you approve at each stage gate
-  → Visual board keeps you informed at all times
+  → Visual board (docs/project/board.html) keeps you informed at all times
 ```
 
 ## Architecture
@@ -114,10 +133,11 @@ DevOps    ✓   ✓     ✗      ✓    ✗     -       ✗
 
 ### Startup
 
-1. You describe your idea
-2. PM creates `docs/project/` with project brief, task breakdown, and visual board
-3. PM presents the plan for your approval (in supervised mode)
-4. On approval, PM assigns first-stage tasks
+1. You run `/crew` with your idea
+2. PM runs a **preflight check** — verifies each role's required tools are available. If something is missing (e.g., WebSearch for Architect), PM tells you and asks whether to proceed with reduced capabilities or fix it first.
+3. PM creates `docs/project/` with project brief, task breakdown, and visual board
+4. PM presents the plan for your approval (in supervised mode)
+5. On approval, PM assigns first-stage tasks
 
 ### Execution Loop
 
@@ -161,13 +181,37 @@ stages:
 
 The visual board (`docs/project/board.html`) reads from `board.json` and renders stage progress, kanban columns, and role workload — open it in any browser.
 
+## Superpowers Integration
+
+Agents automatically leverage [superpowers](https://github.com/obra/superpowers) skills when installed. These are enhancements, not hard dependencies — if a skill is not available, the agent proceeds without it.
+
+| Agent | Superpowers Skills Used |
+|---|---|
+| PM | `writing-plans`, `verification-before-completion` |
+| Architect | `brainstorming`, `verification-before-completion` |
+| Designer | `brainstorming`, `verification-before-completion` |
+| Developer | `test-driven-development`, `systematic-debugging`, `requesting-code-review`, `verification-before-completion` |
+| Tester | `systematic-debugging`, `verification-before-completion` |
+| DevOps | `verification-before-completion` |
+
+## Dependencies
+
+All required tools are Claude Code built-ins (Read, Write, Edit, Bash, Agent, SendMessage, TeamCreate, Task system, WebSearch, WebFetch). No external dependencies required.
+
+Optional MCP servers can enhance capabilities:
+- **Design tools** (e.g., Google Stitch API) — enhances Designer with direct tool integration. Without it, Designer generates prompts for you to execute manually.
+
+The preflight check in `project-init` verifies tool availability before starting.
+
 ## Repository Structure
 
 ```
 claude-crew/
 ├── .claude-plugin/
-│   └── plugin.json          # Plugin metadata for distribution
+│   └── plugin.json          # Plugin metadata and dependency declarations
 ├── skills/
+│   ├── crew/                # /crew slash command entry point
+│   │   └── SKILL.md
 │   ├── agents/              # Role definitions
 │   │   ├── pm.md
 │   │   ├── architect.md
@@ -176,7 +220,7 @@ claude-crew/
 │   │   ├── tester.md
 │   │   └── devops.md
 │   └── workflows/           # Coordination workflows
-│       ├── project-init.md  # Project kickoff
+│       ├── project-init.md  # Project kickoff (includes preflight check)
 │       ├── stage-gate.md    # Stage approval
 │       └── board-update.md  # Board refresh on task change
 ├── templates/
