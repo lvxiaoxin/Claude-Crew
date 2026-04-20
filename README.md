@@ -29,6 +29,12 @@ Claude Crew turns Claude Code into a full development team. Describe your idea, 
   DevOps    → Sets up CI/CD, manages builds and releases (optional)
 ```
 
+<p align="center">
+  <img src="docs/media/board.png" alt="Claude Crew Project Board" width="800">
+  <br>
+  <em>Live project board — auto-refreshes every 5s, tracks stages, tasks, and role workload</em>
+</p>
+
 ---
 
 ## Installation
