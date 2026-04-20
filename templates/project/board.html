@@ -6,55 +6,56 @@
 <title>Project Board</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #e2e8f0; padding: 24px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 24px; }
 
   .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-  .header h1 { font-size: 24px; font-weight: 600; }
+  .header h1 { font-size: 24px; font-weight: 600; color: #0f172a; }
   .header-right { display: flex; align-items: center; gap: 16px; }
   .autonomy-badge { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-  .autonomy-supervised { background: #1e40af; color: #93c5fd; }
-  .autonomy-advisory { background: #854d0e; color: #fcd34d; }
-  .autonomy-autonomous { background: #166534; color: #86efac; }
-  .updated { font-size: 12px; color: #64748b; }
+  .autonomy-supervised { background: #dbeafe; color: #1e40af; }
+  .autonomy-advisory { background: #fef3c7; color: #92400e; }
+  .autonomy-autonomous { background: #dcfce7; color: #166534; }
+  .auto-refresh { font-size: 11px; color: #94a3b8; }
+  .updated { font-size: 12px; color: #94a3b8; }
 
   .stages { display: flex; flex-direction: column; gap: 20px; margin-bottom: 40px; }
-  .stage { background: #1e293b; border-radius: 12px; padding: 20px; }
+  .stage { background: #ffffff; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; }
   .stage-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .stage-name { font-size: 16px; font-weight: 600; }
-  .stage-stats { font-size: 13px; color: #94a3b8; }
-  .progress-bar { height: 8px; background: #334155; border-radius: 4px; overflow: hidden; }
+  .stage-name { font-size: 16px; font-weight: 600; color: #0f172a; }
+  .stage-stats { font-size: 13px; color: #64748b; }
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 4px; transition: width 0.3s ease; }
-  .progress-fill.pending { background: #475569; }
+  .progress-fill.pending { background: #cbd5e1; }
   .progress-fill.in_progress { background: #3b82f6; }
   .progress-fill.completed { background: #22c55e; }
 
   .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
-  .kanban-column { background: #1e293b; border-radius: 12px; padding: 16px; min-height: 200px; }
+  .kanban-column { background: #ffffff; border-radius: 12px; padding: 16px; min-height: 200px; border: 1px solid #e2e8f0; }
   .column-header { font-size: 14px; font-weight: 600; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid; }
-  .column-header.pending { border-color: #475569; color: #94a3b8; }
-  .column-header.in_progress { border-color: #3b82f6; color: #60a5fa; }
-  .column-header.completed { border-color: #22c55e; color: #4ade80; }
-  .column-header.blocked { border-color: #ef4444; color: #f87171; }
-  .column-count { font-weight: 400; color: #64748b; }
+  .column-header.pending { border-color: #cbd5e1; color: #64748b; }
+  .column-header.in_progress { border-color: #3b82f6; color: #2563eb; }
+  .column-header.completed { border-color: #22c55e; color: #16a34a; }
+  .column-header.blocked { border-color: #ef4444; color: #dc2626; }
+  .column-count { font-weight: 400; color: #94a3b8; }
 
-  .task-card { background: #0f172a; border-radius: 8px; padding: 12px; margin-bottom: 8px; border-left: 3px solid; }
-  .task-card.pending { border-left-color: #475569; }
+  .task-card { background: #f8fafc; border-radius: 8px; padding: 12px; margin-bottom: 8px; border-left: 3px solid; }
+  .task-card.pending { border-left-color: #cbd5e1; }
   .task-card.in_progress { border-left-color: #3b82f6; }
   .task-card.completed { border-left-color: #22c55e; }
   .task-card.blocked { border-left-color: #ef4444; }
-  .task-id { font-size: 11px; color: #64748b; font-family: monospace; }
-  .task-title { font-size: 13px; margin: 4px 0; }
-  .task-assignee { font-size: 11px; color: #94a3b8; }
+  .task-id { font-size: 11px; color: #94a3b8; font-family: monospace; }
+  .task-title { font-size: 13px; margin: 4px 0; color: #1e293b; }
+  .task-assignee { font-size: 11px; color: #64748b; }
 
-  .workload { background: #1e293b; border-radius: 12px; padding: 20px; }
-  .workload h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+  .workload { background: #ffffff; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; }
+  .workload h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #0f172a; }
   .workload-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-  .role-card { background: #0f172a; border-radius: 8px; padding: 12px; text-align: center; }
-  .role-name { font-size: 13px; font-weight: 600; text-transform: capitalize; margin-bottom: 4px; }
+  .role-card { background: #f8fafc; border-radius: 8px; padding: 12px; text-align: center; }
+  .role-name { font-size: 13px; font-weight: 600; text-transform: capitalize; margin-bottom: 4px; color: #334155; }
   .role-count { font-size: 24px; font-weight: 700; color: #3b82f6; }
-  .role-label { font-size: 11px; color: #64748b; }
+  .role-label { font-size: 11px; color: #94a3b8; }
 
-  .empty { color: #475569; font-size: 13px; padding: 20px; text-align: center; }
+  .empty { color: #94a3b8; font-size: 13px; padding: 20px; text-align: center; }
 
   @media (max-width: 768px) { .kanban { grid-template-columns: repeat(2, 1fr); } }
 </style>
@@ -67,13 +68,14 @@
     <div class="updated" id="updatedAt"></div>
   </div>
   <div class="header-right">
+    <span class="auto-refresh">auto-refresh 5s</span>
     <span class="autonomy-badge" id="autonomyBadge"></span>
   </div>
 </div>
 
 <div class="stages" id="stages"></div>
 
-<h2 style="font-size: 18px; margin-bottom: 16px;">Tasks</h2>
+<h2 style="font-size: 18px; margin-bottom: 16px; color: #0f172a;">Tasks</h2>
 <div class="kanban" id="kanban"></div>
 
 <div class="workload" id="workload">
@@ -162,6 +164,9 @@ function render(data) {
 }
 
 render(BOARD_DATA);
+
+// Auto-refresh: reload the page every 5 seconds to pick up PM's updates
+setInterval(() => { location.reload(); }, 5000);
 </script>
 </body>
 </html>
