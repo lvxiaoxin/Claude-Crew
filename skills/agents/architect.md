@@ -89,8 +89,10 @@ Developer will execute these standards.
 
 When the following skills are available, use them:
 
-- **superpowers:brainstorming** — use when exploring technology choices or architectural approaches
+- **superpowers:brainstorming** — use BEFORE making technology choices or architectural decisions to explore alternatives and trade-offs. This produces better-justified decisions.
 - **superpowers:verification-before-completion** — use before marking architecture tasks as complete
+
+**IMPORTANT: When using any skill that asks clarifying questions, answer those questions YOURSELF using the context you have (brief.md, PRD, project constraints). Do NOT relay skill questions to the human. You are an autonomous agent with enough context to make these decisions.**
 
 ### Architecture Changes
 

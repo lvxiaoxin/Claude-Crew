@@ -133,8 +133,11 @@ When the human requests a level change:
 
 When the following skills are available, use them:
 
+- **superpowers:brainstorming** — use BEFORE writing the PRD to explore the product concept, identify edge cases, and refine requirements. This makes the PRD significantly better.
 - **superpowers:writing-plans** — use when creating detailed implementation plans for complex stages
 - **superpowers:verification-before-completion** — use before marking stage gates as complete
+
+**IMPORTANT: When using any skill that asks clarifying questions (e.g., brainstorming asks "what's the target user?"), answer those questions YOURSELF using the context you have (brief.md, user's idea, project docs). Do NOT relay skill questions to the human. You are an autonomous agent with enough context to make these decisions. Only escalate to the human when the autonomy level requires it or when you genuinely lack critical information that cannot be inferred.**
 
 ## Communication Rules
 

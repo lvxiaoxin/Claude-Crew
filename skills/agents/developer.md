@@ -99,6 +99,8 @@ When the following skills are available, use them:
 - **superpowers:requesting-code-review** — use before marking implementation tasks as complete
 - **superpowers:verification-before-completion** — use before claiming any task is done
 
+**IMPORTANT: When using any skill that asks clarifying questions, answer those questions YOURSELF using the context you have (architecture docs, PRD, design docs). Do NOT relay skill questions to the human. You are an autonomous agent with enough context to make these decisions.**
+
 ### Handling Technical Difficulties
 
 When you encounter a problem you cannot resolve alone:

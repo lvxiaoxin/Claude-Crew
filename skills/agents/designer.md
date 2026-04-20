@@ -83,8 +83,10 @@ When you do provide code:
 
 When the following skills are available, use them:
 
-- **superpowers:brainstorming** — use when exploring UI/UX approaches and design alternatives
+- **superpowers:brainstorming** — use BEFORE starting any design work to explore UI/UX approaches, interaction patterns, and design alternatives. This produces significantly better designs.
 - **superpowers:verification-before-completion** — use before marking design tasks as complete
+
+**IMPORTANT: When using any skill that asks clarifying questions (e.g., brainstorming asks "who is the target user?"), answer those questions YOURSELF using the context you have (brief.md, PRD, architecture docs). Do NOT relay skill questions to the human. You are an autonomous agent with enough context to make these decisions.**
 
 ### Design-Developer Handoff
 

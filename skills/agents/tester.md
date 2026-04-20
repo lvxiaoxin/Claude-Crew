@@ -81,6 +81,8 @@ When the following skills are available, use them:
 - **superpowers:systematic-debugging** — use when a test failure is hard to diagnose
 - **superpowers:verification-before-completion** — use before marking test tasks as complete
 
+**IMPORTANT: When using any skill that asks clarifying questions, answer those questions YOURSELF using the context you have (test plan, architecture docs, PRD). Do NOT relay skill questions to the human. You are an autonomous agent with enough context to make these decisions.**
+
 ### Fix Verification
 
 When Developer reports a bug fix:
