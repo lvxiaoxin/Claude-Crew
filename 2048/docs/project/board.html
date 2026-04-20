@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Board</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 24px; }
+
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+  .header h1 { font-size: 24px; font-weight: 600; color: #0f172a; }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .autonomy-badge { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+  .autonomy-supervised { background: #dbeafe; color: #1e40af; }
+  .autonomy-advisory { background: #fef3c7; color: #92400e; }
+  .autonomy-autonomous { background: #dcfce7; color: #166534; }
+  .auto-refresh { font-size: 11px; color: #94a3b8; }
+  .updated { font-size: 12px; color: #94a3b8; }
+
+  .stages { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+  .stage { background: #ffffff; border-radius: 12px; padding: 14px 18px; border: 1px solid #e2e8f0; flex: 1; min-width: 160px; }
+  .stage-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .stage-name { font-size: 13px; font-weight: 600; color: #0f172a; }
+  .stage-stats { font-size: 11px; color: #64748b; }
+  .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s ease; }
+  .progress-fill.pending { background: #cbd5e1; }
+  .progress-fill.in_progress { background: #3b82f6; }
+  .progress-fill.completed { background: #22c55e; }
+
+  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+  .kanban-column { background: #ffffff; border-radius: 12px; padding: 16px; min-height: 200px; border: 1px solid #e2e8f0; }
+  .column-header { font-size: 14px; font-weight: 600; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid; }
+  .column-header.pending { border-color: #cbd5e1; color: #64748b; }
+  .column-header.in_progress { border-color: #3b82f6; color: #2563eb; }
+  .column-header.completed { border-color: #22c55e; color: #16a34a; }
+  .column-header.blocked { border-color: #ef4444; color: #dc2626; }
+  .column-count { font-weight: 400; color: #94a3b8; }
+
+  .task-card { background: #f8fafc; border-radius: 8px; padding: 12px; margin-bottom: 8px; border-left: 3px solid; }
+  .task-card.pending { border-left-color: #cbd5e1; }
+  .task-card.in_progress { border-left-color: #3b82f6; }
+  .task-card.completed { border-left-color: #22c55e; }
+  .task-card.blocked { border-left-color: #ef4444; }
+  .task-id { font-size: 11px; color: #94a3b8; font-family: monospace; }
+  .task-title { font-size: 13px; margin: 4px 0; color: #1e293b; }
+  .task-assignee { font-size: 11px; color: #64748b; }
+
+  .workload { background: #ffffff; border-radius: 12px; padding: 14px 20px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .workload h2 { font-size: 14px; font-weight: 600; color: #0f172a; margin-right: 4px; white-space: nowrap; }
+  .workload-grid { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .role-card { background: #f8fafc; border-radius: 8px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; }
+  .role-name { font-size: 13px; font-weight: 600; text-transform: capitalize; color: #334155; }
+  .role-count { font-size: 16px; font-weight: 700; color: #3b82f6; }
+  .role-label { display: none; }
+
+  .empty { color: #94a3b8; font-size: 13px; padding: 20px; text-align: center; }
+
+  @media (max-width: 768px) { .kanban { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1 id="projectName">Project Board</h1>
+    <div class="updated" id="updatedAt"></div>
+  </div>
+  <div class="header-right">
+    <span class="auto-refresh">auto-refresh 5s</span>
+    <span class="autonomy-badge" id="autonomyBadge"></span>
+  </div>
+</div>
+
+<div class="stages" id="stages"></div>
+
+<h2 style="font-size: 18px; margin-bottom: 16px; color: #0f172a;">Tasks</h2>
+<div class="kanban" id="kanban"></div>
+
+<div class="workload" id="workload">
+  <h2>Role Workload</h2>
+  <div class="workload-grid" id="workloadGrid"></div>
+</div>
+
+<script>
+// ===== BOARD DATA (PM: replace this object when regenerating) =====
+const BOARD_DATA = {
+  "project": "2048 Game",
+  "autonomy": "advisory",
+  "updated": "2026-04-20",
+  "stages": [
+    { "name": "Requirements & Architecture", "status": "pending", "tasks": { "total": 3, "completed": 0 } },
+    { "name": "Design", "status": "pending", "tasks": { "total": 0, "completed": 0 } },
+    { "name": "Development", "status": "pending", "tasks": { "total": 0, "completed": 0 } },
+    { "name": "Testing", "status": "pending", "tasks": { "total": 0, "completed": 0 } },
+    { "name": "Release", "status": "pending", "tasks": { "total": 0, "completed": 0 } }
+  ],
+  "tasksByStatus": {
+    "pending": [
+      { "id": "T001", "title": "Write PRD", "assignee": "pm" },
+      { "id": "T002", "title": "Technology selection", "assignee": "architect" },
+      { "id": "T003", "title": "System architecture design", "assignee": "architect" }
+    ],
+    "in_progress": [],
+    "completed": [],
+    "blocked": []
+  },
+  "roleWorkload": {}
+};
+// ===== END BOARD DATA =====
+
+function render(data) {
+  document.getElementById('projectName').textContent = data.project || 'Project Board';
+  document.getElementById('updatedAt').textContent = data.updated ? `Updated: ${data.updated}` : '';
+
+  const badge = document.getElementById('autonomyBadge');
+  badge.textContent = data.autonomy || 'advisory';
+  badge.className = `autonomy-badge autonomy-${data.autonomy || 'advisory'}`;
+
+  const stagesEl = document.getElementById('stages');
+  stagesEl.innerHTML = (data.stages || []).map(stage => {
+    const total = stage.tasks.total || 0;
+    const completed = stage.tasks.completed || 0;
+    const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+    const statusClass = stage.status === 'completed' ? 'completed' :
+                        stage.status === 'in_progress' ? 'in_progress' : 'pending';
+    return `
+      <div class="stage">
+        <div class="stage-header">
+          <span class="stage-name">${stage.name}</span>
+          <span class="stage-stats">${completed}/${total} tasks &middot; ${progress}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill ${statusClass}" style="width: ${progress}%"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const kanbanEl = document.getElementById('kanban');
+  const statuses = ['pending', 'in_progress', 'completed', 'blocked'];
+  const labels = { pending: 'Pending', in_progress: 'In Progress', completed: 'Completed', blocked: 'Blocked' };
+
+  kanbanEl.innerHTML = statuses.map(status => {
+    const tasks = (data.tasksByStatus[status] || []);
+    const cards = tasks.length > 0
+      ? tasks.map(t => `
+          <div class="task-card ${status}">
+            <div class="task-id">${t.id}</div>
+            <div class="task-title">${t.title}</div>
+            <div class="task-assignee">${t.assignee || ''}</div>
+          </div>`).join('')
+      : '<div class="empty">No tasks</div>';
+    return `
+      <div class="kanban-column">
+        <div class="column-header ${status}">${labels[status]} <span class="column-count">(${tasks.length})</span></div>
+        ${cards}
+      </div>`;
+  }).join('');
+
+  const grid = document.getElementById('workloadGrid');
+  const workload = data.roleWorkload || {};
+  const roles = Object.keys(workload);
+  if (roles.length > 0) {
+    grid.innerHTML = roles.map(role => `
+      <div class="role-card">
+        <div class="role-name">${role}</div>
+        <div class="role-count">${workload[role]}</div>
+        <div class="role-label">active tasks</div>
+      </div>`).join('');
+  } else {
+    grid.innerHTML = '<div class="empty">No tasks assigned yet</div>';
+  }
+}
+
+render(BOARD_DATA);
+
+// Auto-refresh: reload the page every 5 seconds to pick up PM's updates
+setInterval(() => { location.reload(); }, 5000);
+</script>
+</body>
+</html>

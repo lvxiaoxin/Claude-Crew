@@ -1,0 +1,56 @@
+project: "2048 Game"
+autonomy: advisory
+created: "2026-04-20"
+updated: "2026-04-20"
+
+roles:
+  - pm
+  - architect
+  - designer
+  - developer
+  - tester
+
+stages:
+  - name: "Requirements & Architecture"
+    status: pending
+    tasks:
+      - id: T001
+        title: "Write PRD"
+        assignee: pm
+        status: pending
+        depends_on: []
+        output: docs/project/prd.md
+        created: "2026-04-20"
+        updated: "2026-04-20"
+      - id: T002
+        title: "Technology selection"
+        assignee: architect
+        status: pending
+        depends_on: []
+        output: docs/project/tech-selection.md
+        created: "2026-04-20"
+        updated: "2026-04-20"
+      - id: T003
+        title: "System architecture design"
+        assignee: architect
+        status: pending
+        depends_on: [T002]
+        output: docs/project/architecture.md
+        created: "2026-04-20"
+        updated: "2026-04-20"
+
+  - name: "Design"
+    status: pending
+    tasks: []
+
+  - name: "Development"
+    status: pending
+    tasks: []
+
+  - name: "Testing"
+    status: pending
+    tasks: []
+
+  - name: "Release"
+    status: pending
+    tasks: []
