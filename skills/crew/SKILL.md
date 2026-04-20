@@ -114,7 +114,7 @@ stages:
     tasks: []
 ```
 
-**docs/project/board.html** — Copy from the board template. It's self-contained HTML with an embedded `BOARD_DATA` JavaScript object. Generate the initial BOARD_DATA from the tasks.yaml above and embed it.
+**docs/project/board.html** — Copy from `~/.claude/claude-crew-templates/project/board.html`. It's self-contained HTML with an embedded `BOARD_DATA` JavaScript object. After copying, update the BOARD_DATA with the initial task data from tasks.yaml above.
 
 **docs/project/doc-index.md** — Central document index.
 

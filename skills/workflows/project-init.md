@@ -39,15 +39,15 @@ Before creating anything, verify that the required capabilities are available. F
 
 ### Step 1: Create Project Structure
 
-Create the `docs/project/` directory and copy templates:
+Create the `docs/project/` directory and copy templates from `~/.claude/claude-crew-templates/project/`:
 
 ```
 docs/project/
-├── tasks.yaml       # from templates/project/tasks.yaml
-├── board.json       # from templates/project/board.json
-├── board.html       # from templates/project/board.html
+├── tasks.yaml       # from ~/.claude/claude-crew-templates/project/tasks.yaml
+├── board.html       # from ~/.claude/claude-crew-templates/project/board.html
 ├── brief.md         # created in step 2
 ├── doc-index.md     # created in step 3
+├── comms-log.md     # audit trail for agent communications
 └── design-assets/   # empty directory for Designer
 ```
 
