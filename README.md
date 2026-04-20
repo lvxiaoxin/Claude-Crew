@@ -1,16 +1,39 @@
-# Claude Crew
+<p align="center">
+  <img src="https://img.shields.io/badge/Claude_Code-Plugin-7C3AED?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude Code Plugin">
+  <img src="https://img.shields.io/badge/Agents-6_Roles-2563EB?style=for-the-badge" alt="6 Roles">
+  <img src="https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge" alt="MIT License">
+</p>
 
-A reusable, project-agnostic multi-agent team system for Claude Code. Six specialized agent roles collaborate through a task-based coordination bus, with persistent state and a visual project board. You provide ideas and feedback at key checkpoints; agents handle everything else.
+<h1 align="center">Claude Crew</h1>
+
+<p align="center">
+  <strong>A multi-agent team system for Claude Code.</strong><br>
+  Six specialized AI agents collaborate autonomously on your projects.<br>
+  You provide the ideas. They handle the rest.
+</p>
+
+---
+
+## Overview
+
+Claude Crew turns Claude Code into a full development team. Describe your idea, and a team of specialized agents — PM, Architect, Designer, Developer, Tester, and DevOps — will decompose it into stages, design the architecture, build the code, write tests, and keep you informed through a live visual board.
+
+```
+/crew I want to build a cross-platform photo organizer app...
+
+  PM        → Captures idea, writes PRD, manages tasks and board
+  Architect → Selects tech stack, designs system architecture
+  Designer  → Creates UI/UX specs, generates design tool prompts
+  Developer → Scaffolds project, implements features, fixes bugs
+  Tester    → Writes automated tests, reports defects
+  DevOps    → Sets up CI/CD, manages builds and releases (optional)
+```
+
+---
 
 ## Installation
 
-**Via Claude Code plugin system** (when published to a marketplace):
-
-```
-/plugin install claude-crew
-```
-
-**From source** (current method):
+**From source:**
 
 ```bash
 git clone https://github.com/lvxiaoxin/Claude-Crew.git
@@ -18,231 +41,234 @@ cd Claude-Crew
 ./dev/install.sh
 ```
 
-The install script checks for conflicts before copying, and deploys skills to `~/.claude/skills/`.
+> Installs skills to `~/.claude/skills/` and templates to `~/.claude/claude-crew-templates/`. The script checks for conflicts before overwriting.
 
-## Usage
-
-Start a project with the `/crew` slash command:
+**Via plugin marketplace** (coming soon):
 
 ```
-/crew I want to build a cross-platform photo organizer app that helps users
-delete similar photos, remove unwanted photos, and sort photos into albums
+/plugin install claude-crew
 ```
 
-Or just `/crew` and describe your idea when prompted.
+---
 
-**What happens next:**
+## Quick Start
+
+In any Claude Code session, run:
 
 ```
-/crew your idea...
-  → Preflight check: verify all required tools are available
-  → PM captures your idea, creates a project brief
-  → PM decomposes into stages: Requirements → Design → Development → Testing → Release
-  → PM assigns first-stage tasks to Architect and itself
-  → Team executes, you approve at each stage gate
-  → Visual board (docs/project/board.html) keeps you informed at all times
+/crew [describe your project idea]
 ```
 
-## Architecture
+**What happens:**
 
-| Layer | Mechanism | Purpose |
-|---|---|---|
-| Role definition | `skills/agents/*.md` | Who each agent is and what they can do |
-| Role instance | `TeamCreate` | Persistent, named agents with memory across tasks |
-| Task coordination | Task system | Task state, dependencies, assignment |
-| Agent communication | `SendMessage` | Direct inter-agent dialogue |
-| Persistence | `docs/project/` files | Board, tasks, documents — survives across sessions |
-| Human interface | Stage-gate approval | PM notifies you at key checkpoints |
+1. **Preflight check** — verifies required tools are available
+2. **Project bootstrap** — PM creates `docs/project/` with brief, task breakdown, and visual board
+3. **Plan approval** — PM presents the plan for your review
+4. **Execution** — agents work through stages: Requirements → Design → Development → Testing → Release
+5. **Live board** — open `docs/project/board.html` in your browser (auto-refreshes every 5s)
+
+---
 
 ## Team Roles
 
-### PM (Project Manager)
+| Role | Responsibility | Key Outputs |
+|:-----|:---------------|:------------|
+| **PM** | Central coordinator. Decomposes ideas, assigns tasks, tracks progress, talks to you. Never writes code. | PRD, tasks.yaml, board.html, comms-log.md |
+| **Architect** | Tech selection, system design, architecture docs. Researches via web, writes POC only when uncertain. | architecture.md, tech-selection.md |
+| **Designer** | UI/UX design, interaction flows, visual specs. Generates prompts for external design tools. | ui-design.md, design-assets/ |
+| **Developer** | Code scaffolding, feature implementation, bug fixes. Follows conventional commits. | Source code, api.md |
+| **Tester** | Automated testing (unit, integration, widget/UI). Reports defects to Developer. | Test code, test-plan.md |
+| **DevOps** | CI/CD, builds, repo management, monitoring, releases. *Optional — activated when needed.* | CI/CD configs, devops.md |
 
-The central coordinator. Translates your ideas into actionable plans, assigns tasks, tracks progress, and keeps you informed.
-
-- **Outputs**: Project brief, PRD, tasks.yaml, visual board (board.html)
-- **Key behavior**: Only agent that talks to you; maintains the single source of truth for project state
-- **Board auto-update**: Regenerates the visual board whenever any task completes
-- **Session persistence**: PM stays active for the entire session — all your input goes through PM until you end the project
-- **Background dispatch**: Agents run in background so PM remains responsive to you
-
-### Architect
-
-Makes foundational technical decisions: tech stack, system structure, module boundaries.
-
-- **Outputs**: Architecture doc, tech selection rationale, POC code (only when uncertain)
-- **Key behavior**: Researches via web, writes POC only when needed (skips when confident), documents only — no production code
-
-### Designer
-
-Creates UI/UX design: layouts, interaction flows, visual style, component specifications.
-
-- **Outputs**: UI design doc, design assets (screenshots/links), optional UI component code
-- **Key behavior**: Generates design prompts for external tools (e.g., Google Stitch) — you execute the prompt and paste back the result. Can provide UI code when confident, but Developer must verify.
-
-### Developer
-
-Turns architecture and design into working code. The primary code producer.
-
-- **Outputs**: Source code, API documentation, conventional commits
-- **Key behavior**: Scaffolds project structure, implements features, verifies Designer's UI code against screenshots, fixes Tester's defect reports
-
-### Tester
-
-Ensures quality through automated testing.
-
-- **Outputs**: Test code, test plan, defect reports
-- **Key behavior**: Writes automated tests only (unit, integration, widget/UI). Refines Architect's high-level testing strategy into detailed test plans.
-
-### DevOps (Optional)
-
-Handles CI/CD, builds, repository management, monitoring, and releases.
-
-- **Activation**: PM decides at project kickoff whether DevOps is needed. Can be activated later.
-- **When not activated**: Architect defines build standards, Developer executes.
+---
 
 ## Autonomy Levels
 
-A single global parameter controlling how all agents interact with you:
+Control how much the team involves you:
 
-| Level | Behavior | When to use |
-|---|---|---|
-| **advisory** | PM only escalates major decisions, risks, or ambiguity | Default — balanced oversight |
-| **supervised** | PM seeks your approval at every stage gate | When you want full control |
-| **autonomous** | Agents operate independently; you check the board when you want | When you want maximum speed and minimal interruption |
+| Level | Behavior | Best for |
+|:------|:---------|:---------|
+| **advisory** (default) | PM only escalates major decisions, risks, or ambiguity | Balanced oversight |
+| **supervised** | PM seeks your approval at every stage gate | Full control |
+| **autonomous** | Agents work independently; you monitor via the board | Maximum speed |
 
-Switch anytime by telling PM: *"switch to advisory"*
-
-## Communication Rules
+Switch anytime:
 
 ```
-         PM  Arch  Design  Dev  Test  DevOps  Human
-PM        -   ✓     ✓      ✓    ✓     ✓       ✓
-Arch      ✓   -     ✗      ✓    ✗     ✓       ✗
-Design    ✓   ✗     -      ✓    ✗     ✗       ✗
-Dev       ✓   ✓     ✓      -    ✓     ✓       ✗
-Test      ✓   ✗     ✗      ✓    -     ✗       ✗
-DevOps    ✓   ✓     ✗      ✓    ✗     -       ✗
+"switch to autonomous"
+```
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│                    You (Human)                   │
+│              Provide ideas & feedback            │
+└─────────────────────┬───────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────┐
+│                  PM (always on)                  │
+│  Tasks · Board · Stage gates · Comms log        │
+└──┬──────┬──────┬──────┬──────┬──────┬───────────┘
+   │      │      │      │      │      │
+   ▼      ▼      ▼      ▼      ▼      ▼
+ Arch  Designer  Dev   Tester DevOps  ...
+```
+
+| Layer | Mechanism | Purpose |
+|:------|:----------|:--------|
+| Role definitions | `skills/agents/*.md` | Who each agent is and what they can do |
+| Entry point | `/crew` slash command | Bootstraps PM and project structure |
+| Task coordination | `tasks.yaml` + Task system | Single source of truth for all task state |
+| Agent dispatch | `Agent` tool (background) | PM dispatches roles without blocking |
+| Persistence | `docs/project/` files | Board, tasks, docs — survives across sessions |
+| Audit trail | `comms-log.md` | All agent communications logged for review |
+
+---
+
+## Communication Matrix
+
+```
+         PM    Arch   Design  Dev    Test   DevOps  Human
+PM        -     ✓      ✓       ✓      ✓      ✓       ✓
+Arch      ✓     -      ✗       ✓      ✗      ✓       ✗
+Design    ✓     ✗      -       ✓      ✗      ✗       ✗
+Dev       ✓     ✓      ✓       -      ✓      ✓       ✗
+Test      ✓     ✗      ✗       ✓      -      ✗       ✗
+DevOps    ✓     ✓      ✗       ✓      ✗      -       ✗
 ```
 
 - **PM is the only agent that talks to you.** All others escalate through PM.
-- **Technical roles** can discuss directly with connected roles (e.g., Architect ↔ Developer).
-- **Cross-domain** communication goes through PM.
+- **Technical roles** discuss directly with connected peers (e.g., Architect ↔ Developer).
+- **Cross-domain** communication routes through PM.
+- **All communications** are logged to `docs/project/comms-log.md`.
 
-**Escalation path**: agent contacts the relevant role directly → if unresolved, escalates to PM → PM decides whether to involve you (based on autonomy level).
+---
 
 ## Project Lifecycle
 
 ### Startup
+1. `/crew` triggers PM with your idea
+2. PM runs preflight check, creates project structure
+3. PM presents plan → you approve
 
-1. You run `/crew` with your idea
-2. PM runs a **preflight check** — verifies each role's required tools are available. If something is missing (e.g., WebSearch for Architect), PM tells you and asks whether to proceed with reduced capabilities or fix it first.
-3. PM creates `docs/project/` with project brief, task breakdown, and visual board
-4. PM presents the plan for your approval (in supervised mode)
-5. On approval, PM assigns first-stage tasks
-
-### Execution Loop
-
-1. PM assigns tasks to roles via SendMessage
-2. Roles execute (may discuss directly for technical details)
-3. On task completion: PM updates tasks.yaml, regenerates the board
-4. When a stage completes: PM triggers stage-gate (approval/auto-proceed based on autonomy level)
-5. Repeat until project is done
+### Execution
+1. PM assigns tasks → updates board → dispatches agents in background
+2. Agents execute (may discuss directly for technical details)
+3. PM updates `tasks.yaml` + `board.html` on every state change
+4. Stage complete → PM triggers stage-gate based on autonomy level
 
 ### Mid-Flight Input
+You can talk to PM anytime during execution:
 
-You can provide new information to PM at any time during execution:
+| Input type | PM behavior |
+|:-----------|:------------|
+| Minor detail | Records it, tasks continue |
+| Requirement change | Notifies affected agents to pause/adjust |
+| Bug report / feature request | Creates task, assigns to appropriate role, dispatches agent |
+| Direction change | Halts affected tasks, re-plans, seeks confirmation |
 
-- **Low impact** (minor detail): PM records it, current tasks continue
-- **Affects in-progress tasks** (requirement change): PM notifies affected roles to pause/adjust
-- **Direction change** (pivot/drop feature): PM halts affected tasks, re-plans, seeks your confirmation
+> PM **never writes code itself**. All code changes go through Developer/Tester via task dispatch.
 
-## Task Data
-
-All project state lives in `docs/project/tasks.yaml` — the single source of truth:
-
-```yaml
-project: "My App"
-autonomy: supervised
-
-stages:
-  - name: "Requirements & Architecture"
-    status: in_progress
-    tasks:
-      - id: T001
-        title: "Write PRD"
-        assignee: pm
-        status: completed
-        output: docs/project/prd.md
-      - id: T002
-        title: "Technology selection"
-        assignee: architect
-        status: in_progress
-        depends_on: []
-```
-
-The visual board (`docs/project/board.html`) is self-contained HTML with embedded data — open it directly in any browser (no server needed, works with `file://` protocol).
+---
 
 ## Superpowers Integration
 
-Agents automatically leverage [superpowers](https://github.com/obra/superpowers) skills when installed. These are enhancements, not hard dependencies — if a skill is not available, the agent proceeds without it.
+Agents leverage [superpowers](https://github.com/obra/superpowers) skills when installed. Not required — agents proceed without them.
 
-| Agent | Superpowers Skills Used |
-|---|---|
-| PM | `writing-plans`, `verification-before-completion` |
+| Agent | Skills Used |
+|:------|:------------|
+| PM | `brainstorming`, `writing-plans`, `verification-before-completion` |
 | Architect | `brainstorming`, `verification-before-completion` |
 | Designer | `brainstorming`, `verification-before-completion` |
 | Developer | `test-driven-development`, `systematic-debugging`, `requesting-code-review`, `verification-before-completion` |
 | Tester | `systematic-debugging`, `verification-before-completion` |
 | DevOps | `verification-before-completion` |
 
-## Dependencies
+> Agents **self-answer** any clarifying questions from skills using available project context — they don't relay skill questions to you.
 
-All required tools are Claude Code built-ins (Read, Write, Edit, Bash, Agent, SendMessage, TeamCreate, Task system, WebSearch, WebFetch). No external dependencies required.
+---
 
-Optional MCP servers can enhance capabilities:
-- **Design tools** (e.g., Google Stitch API) — enhances Designer with direct tool integration. Without it, Designer generates prompts for you to execute manually.
+## Project Files
 
-The preflight check in `project-init` verifies tool availability before starting.
+When PM initializes a project, it creates:
+
+```
+your-project/
+└── docs/project/
+    ├── brief.md            # Your idea, structured
+    ├── prd.md              # Product requirements
+    ├── tasks.yaml          # Task state (single source of truth)
+    ├── board.html          # Visual board (open in browser, auto-refreshes)
+    ├── doc-index.md        # Central document index
+    ├── comms-log.md        # Audit trail of all agent communications
+    ├── architecture.md     # System architecture (Architect)
+    ├── tech-selection.md   # Technology choices (Architect)
+    ├── ui-design.md        # UI/UX design (Designer)
+    ├── test-plan.md        # Test strategy (Tester)
+    ├── api.md              # Interface docs (Developer)
+    └── design-assets/      # Screenshots, mockups (Designer)
+```
+
+---
 
 ## Repository Structure
 
 ```
 claude-crew/
 ├── .claude-plugin/
-│   └── plugin.json          # Plugin metadata and dependency declarations
+│   └── plugin.json              # Plugin metadata & dependency declarations
 ├── skills/
-│   ├── crew/                # /crew slash command entry point
+│   ├── crew/                    # /crew slash command entry point
 │   │   └── SKILL.md
-│   ├── agents/              # Role definitions
+│   ├── agents/                  # Role definitions
 │   │   ├── pm.md
 │   │   ├── architect.md
 │   │   ├── designer.md
 │   │   ├── developer.md
 │   │   ├── tester.md
 │   │   └── devops.md
-│   └── workflows/           # Coordination workflows
-│       ├── project-init.md  # Project kickoff (includes preflight check)
-│       ├── stage-gate.md    # Stage approval
-│       └── board-update.md  # Board refresh on task change
+│   └── workflows/               # Coordination workflows
+│       ├── project-init.md      # Project kickoff + preflight check
+│       ├── stage-gate.md        # Stage approval transitions
+│       └── board-update.md      # Board refresh on state change
 ├── templates/
-│   └── project/             # Copied into each new project
+│   └── project/                 # Deployed to ~/.claude/claude-crew-templates/
 │       ├── tasks.yaml
 │       └── board.html
 └── docs/
-    └── specs/               # Design specifications
+    └── specs/                   # Design specifications
 ```
+
+---
 
 ## Customization
 
-All role definitions are markdown files in `skills/agents/`. Edit them to:
+All role definitions are markdown files in `skills/agents/`. You can:
 
 - Adjust role responsibilities or boundaries
-- Add new tools or MCP integrations
-- Change communication rules
+- Add new tools or MCP server integrations
+- Change communication rules or autonomy defaults
 - Modify workflow steps
+- Add new agent roles
 
-The system is designed to be project-agnostic — the same roles work for any project. Project-specific context is provided by you at startup and maintained by PM in the project files.
+The system is **project-agnostic** — the same roles work for any project. Project-specific context is provided by you at startup and maintained by PM.
+
+---
+
+## Dependencies
+
+| Type | Details | Required? |
+|:-----|:--------|:----------|
+| Claude Code built-ins | Read, Write, Edit, Bash, Agent, SendMessage, TaskCreate, etc. | Yes |
+| WebSearch / WebFetch | For Architect's technical research | Recommended |
+| MCP design tools | For Designer's direct tool integration | Optional (fallback: manual prompts) |
+| Superpowers plugin | Enhanced workflows (TDD, debugging, code review) | Optional |
+
+---
 
 ## License
 
