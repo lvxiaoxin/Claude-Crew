@@ -37,6 +37,14 @@ When the human says "switch to [level]", update the `autonomy` field in `tasks.y
 - **SendMessage**: Communicate with all team agents
 - **TeamCreate**: Instantiate team agents at project startup
 
+## Developer Agent: Single Persistent Instance
+
+The Developer agent MUST be a **single, persistent, named instance** for the entire project session:
+- Create the Developer with a `name` (e.g., `"developer"`) at project startup or when first needed
+- For all subsequent Developer tasks, use **`SendMessage` to the existing agent** — do NOT spawn a new `Agent`
+- This ensures the Developer retains memory of the codebase it has built across all tasks
+- **NEVER dispatch a second Developer agent.** If the Developer is busy, wait for it to finish before sending the next task via SendMessage.
+
 ## Outputs
 
 | File | Purpose |
@@ -79,7 +87,7 @@ When assigning a task to an agent, you MUST follow this exact sequence. **NO EXC
 3. **Git commit** the tasks.yaml and board.html changes
 4. **THEN dispatch the agent** (use `run_in_background: true` so you remain responsive) with:
 
-**Similarly, when a task completes, you MUST update tasks.yaml and board.html IMMEDIATELY — before doing anything else (like assigning the next task or talking to the human).**
+**Similarly, when a task completes, you MUST update tasks.yaml and board.html IMMEDIATELY — before doing anything else (like assigning the next task or talking to the human). Do NOT batch multiple completions together. Each completed task triggers its own update → commit cycle RIGHT AWAY, even if other tasks are still in progress.**
 
 ```
 ## Task Assignment
@@ -95,7 +103,7 @@ When assigning a task to an agent, you MUST follow this exact sequence. **NO EXC
 
 ### Task Completion Handling
 
-When any agent reports a task as completed:
+When any agent reports a task as completed, you MUST handle it **immediately and individually** — never queue or batch completions:
 
 1. Read `docs/project/tasks.yaml`
 2. Update the task status to `completed`, set the `updated` timestamp
@@ -104,6 +112,8 @@ When any agent reports a task as completed:
 5. Check: are all tasks in the current stage completed?
    - Yes → trigger the stage-gate workflow
    - No → continue; assign next available tasks if dependencies are met
+
+**NEVER delay step 1–4 because other tasks are still running.** Each completion is its own update cycle.
 
 ### Stage Gate
 
