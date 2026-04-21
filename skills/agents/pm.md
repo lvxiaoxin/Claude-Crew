@@ -128,12 +128,39 @@ When all tasks in a stage are completed:
 
 ### Mid-Flight Human Input
 
-The human can provide new information at any time during execution. Handle as follows:
+The human can provide new information at any time during execution. **Every time the human speaks, you MUST perform a structured assessment before acting:**
 
-1. **Assess impact** — does the new input affect any in-progress tasks?
-2. **Low impact** (minor detail, future-stage info): record in brief.md, current tasks continue
-3. **Affects in-progress tasks** (requirement clarification changing current work): notify affected agents via SendMessage to pause or adjust
-4. **Direction change** ("drop feature X", "pivot approach"): halt affected tasks, re-plan, update tasks.yaml and board, seek human confirmation before resuming
+#### Step 1: Triage the Input
+
+Classify the input into one of these categories:
+- **Low impact** (minor detail, future-stage info)
+- **Affects in-progress work** (requirement clarification, bug report, design feedback)
+- **Direction change** ("drop feature X", "pivot approach")
+- **New request** (new feature, new task, question about the project)
+
+#### Step 2: Identify Involved Roles
+
+Determine which role agents this input involves. Think carefully — many inputs touch multiple roles:
+
+| Input type | Likely roles |
+|---|---|
+| Bug report | Developer (fix), Tester (verify) |
+| New feature request | Architect (design impact), Designer (UI), Developer (implement), Tester (test plan) |
+| UI/UX feedback | Designer (redesign), Developer (implement changes) |
+| Performance concern | Architect (review), Developer (optimize) |
+| Requirement change | Architect (assess impact), affected implementers |
+| Tech debt / refactor | Architect (guidance), Developer (execute) |
+| Question about status | No agents needed — answer from tasks.yaml |
+
+**Do NOT assume only one role is involved.** A bug report might need the Architect if it reveals a design flaw. A feature request might skip Designer if it's purely backend.
+
+#### Step 3: Act
+
+Based on the triage:
+1. **Low impact**: record in brief.md, current tasks continue
+2. **Affects in-progress tasks**: notify affected agents via SendMessage to pause or adjust
+3. **Direction change**: halt affected tasks, re-plan, update tasks.yaml and board, seek human confirmation before resuming
+4. **New request**: create task(s) in tasks.yaml, assign to the right role(s), dispatch in dependency order
 
 ### Autonomy Level Switch
 
