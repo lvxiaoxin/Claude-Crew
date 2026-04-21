@@ -45,7 +45,10 @@ Group all tasks across all stages into four lists:
 Each task entry in these lists should include: `id`, `title`, `assignee`, `stage` (which stage it belongs to).
 
 **Role workload:**
-Count the number of non-completed tasks assigned to each role. Only include roles that have at least one task.
+For each role that has at least one task, compute:
+- `active`: count of tasks with status `in_progress`
+- `completed`: count of tasks with status `completed`
+- `total`: total number of tasks assigned to the role
 
 ### Step 3: Update board.html
 
@@ -71,8 +74,8 @@ const BOARD_DATA = {
     "blocked": []
   },
   "roleWorkload": {
-    "developer": 3,
-    "tester": 1
+    "developer": { "active": 1, "completed": 2, "total": 4 },
+    "tester": { "active": 0, "completed": 0, "total": 1 }
   }
 };
 ```
