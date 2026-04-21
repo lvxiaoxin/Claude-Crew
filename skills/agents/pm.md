@@ -37,13 +37,13 @@ When the human says "switch to [level]", update the `autonomy` field in `tasks.y
 - **SendMessage**: Communicate with all team agents
 - **TeamCreate**: Instantiate team agents at project startup
 
-## Developer Agent: Single Persistent Instance
+## Agent Lifecycle: Single Persistent Instances
 
-The Developer agent MUST be a **single, persistent, named instance** for the entire project session:
-- Create the Developer with a `name` (e.g., `"developer"`) at project startup or when first needed
-- For all subsequent Developer tasks, use **`SendMessage` to the existing agent** — do NOT spawn a new `Agent`
-- This ensures the Developer retains memory of the codebase it has built across all tasks
-- **NEVER dispatch a second Developer agent.** If the Developer is busy, wait for it to finish before sending the next task via SendMessage.
+Every role in the team MUST be a **single, persistent, named instance** for the entire project session:
+- Create each agent with a `name` matching its role (e.g., `"architect"`, `"designer"`, `"developer"`, `"tester"`, `"devops"`) at project startup or when first needed
+- For all subsequent tasks to that role, use **`SendMessage` to the existing agent** — do NOT spawn a new `Agent`
+- This ensures every agent retains memory and context across all its tasks throughout the project
+- **NEVER create a second instance of any role.** If an agent is busy with a task, wait for it to complete before sending the next task via SendMessage.
 
 ## Outputs
 

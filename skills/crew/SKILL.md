@@ -162,17 +162,13 @@ When dispatching agents:
 - Include the full task assignment in the agent prompt
 - After agent completes, update tasks.yaml and board.html **immediately** (do NOT batch)
 
-### Developer: Single Persistent Agent
+### Agent Lifecycle: Single Persistent Instances
 
-The Developer agent MUST be a **single, persistent instance** that is reused across all tasks:
-- At project startup, create the Developer agent with a `name` (e.g., `"developer"`)
-- For subsequent Developer tasks, use **`SendMessage` to the existing agent** instead of spawning a new `Agent`
-- This preserves the Developer's memory and context across tasks, so it understands the codebase it has been building
-- **NEVER spawn a second Developer agent.** If the current Developer is busy with a task, wait for it to complete before sending the next task.
-
-### Other Agents
-
-Other roles (Architect, Designer, Tester, DevOps) may be dispatched as new Agent instances per task, since they typically produce standalone documents and benefit less from cross-task memory.
+Every role agent MUST be a **single, persistent, named instance** reused for the entire session:
+- Create each agent with a `name` matching its role (e.g., `"architect"`, `"designer"`, `"developer"`, `"tester"`, `"devops"`)
+- For all subsequent tasks to that role, use **`SendMessage` to the existing agent** — do NOT spawn a new `Agent`
+- This ensures every agent retains memory and context across all its tasks throughout the project
+- **NEVER create a second instance of any role.** If an agent is busy, wait for it to complete before sending the next task via SendMessage.
 
 Agent skill files:
 - `~/.claude/skills/agents/architect.md`
