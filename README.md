@@ -54,7 +54,7 @@ Claude Crew turns Claude Code into a full development team. Describe your idea, 
 ```bash
 git clone https://github.com/lvxiaoxin/Claude-Crew.git
 cd Claude-Crew
-./install.sh
+./dev/install.sh
 ```
 
 > Installs skills to `~/.claude/skills/` and templates to `~/.claude/claude-crew-templates/`. The script checks for conflicts before overwriting.
