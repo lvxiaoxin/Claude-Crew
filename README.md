@@ -14,6 +14,16 @@
 
 ---
 
+## What This Is
+
+Claude Crew is an exercise in **harness engineering** — the practice of shaping AI behavior through structured prompts, role definitions, and process constraints rather than model fine-tuning or custom training.
+
+The model stays the same. What changes is the **harness**: a set of skills, workflows, and templates that turn a single Claude instance into a coordinated team of six specialized agents. Every agent is the same model, but each behaves differently because its role definition constrains what it does, how it communicates, and what it produces.
+
+> **No new model capabilities are created.** The engineering value lies entirely in how the model is orchestrated — role separation, task coordination, state management, and communication rules are all defined in plain markdown files that anyone can read and modify.
+
+---
+
 ## Overview
 
 Claude Crew turns Claude Code into a full development team. Describe your idea, and a team of specialized agents — PM, Architect, Designer, Developer, Tester, and DevOps — will decompose it into stages, design the architecture, build the code, write tests, and keep you informed through a live visual board.
